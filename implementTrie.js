@@ -23,49 +23,33 @@
 // trie.startsWith("app"); // return True
 // trie.insert("app");
 // trie.search("app");     // return True
-
-class TrieNode {
-  constructor() {
-    this.children = new Map()
-    this.isEndOfWord = false
-  }
-}
-
 class Trie {
   constructor() {
-    this.root = new TrieNode()
+    this.root = {}
   }
   insert(word) {
-    let currentNode = this.root
-    for (let i = 0; i < word.length; i++) {
-      const char = word[i]
-      if (!currentNode.children.has(char)) {
-        currentNode.children.set(char, new TrieNode())
-      }
-      currentNode = currentNode.children.get(char)
+    let node = this.root
+    for (let c of word) {
+      if (node[c] == null) node[c] = {}
+      node = node[c]
     }
-    currentNode.isEndOfWord = true
+    node.isWord = true
+  }
+  traverse(word) {
+    let node = this.root
+    for (let c of word) {
+      node = node[c]
+      if (node == null) {
+        return null
+      }
+    }
+    return node
   }
   search(word) {
-    let currentNode = this.root
-    for (let i = 0; i < word.length; i++) {
-      const char = word[i]
-      if (!currentNode.children.has(char)) {
-        return flase
-      }
-      currentNode = currentNode.children.get(char)
-    }
-    return currentNode.isEndOfWord
+    const node = this.traverse(word)
+    return node !== null && node.isWord === true
   }
-  startWith(prefix) {
-    let currentNode = this.root
-    for (let i = 0; i < prefix.length; i++) {
-      const char = prefix[i]
-      if (!currentNode.children.has(char)) {
-        return false
-      }
-      currentNode = currentNode.children.get(char)
-    }
-    return true
+  startsWith(prefix) {
+    return this.traverse(prefix) != null
   }
 }
