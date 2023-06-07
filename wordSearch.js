@@ -23,7 +23,7 @@ function exist(board, word) {
     if (index === word.length) {
       return true
     }
-    if (i < 0 || i >= m || j < 0 || j > -n || board[i][j] !== word[index]) {
+    if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] !== word[index]) {
       return false
     }
     const originalChar = board[i][j]
